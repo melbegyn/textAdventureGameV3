@@ -54,8 +54,7 @@ namespace textAdventureGameV3
 
                     /** if the secret door is opened **/
                     bool secretDoorOpened = openSecretDoor(input);
-                    if (secretDoorOpened)
-                    {
+                    if (secretDoorOpened) {
                         Item elvenBook = getItemFromRoom(input);
                         addItemToInventory(player, elvenBook);
                         LinqHelper.RenameKey(currentRoom.Transitions, AdventureGameConstants.ACCESS_SECRET_DOOR, AdventureGameConstants.NORTH);
@@ -66,8 +65,7 @@ namespace textAdventureGameV3
 
                     /** if the number of moves is even, the enemy is moved **/
                     moves++;
-                    if (moves % 2 == 0)
-                    {
+                    if (moves % 2 == 0) {
                         moveEnemy();
                     }
 
