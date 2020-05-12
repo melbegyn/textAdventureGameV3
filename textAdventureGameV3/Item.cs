@@ -10,8 +10,7 @@ namespace textAdventureGameV3
         public string Name { get; set; }
         public string Description { get; set; }
         public int PointValue { get; set; }
-
-
+         
         public override string ToString() {
             return $"{Name}: ({PointValue} gold) {Description}";
         }

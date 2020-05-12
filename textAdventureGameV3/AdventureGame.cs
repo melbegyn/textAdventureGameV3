@@ -20,17 +20,17 @@ namespace textAdventureGameV3
     {
 
         public Room currentRoom;
+        public Room enemyRoom;
         public List<Room> roomslist = new List<Room>();
         public int moves = 0;
 
-        public void StartGame(Player player)
-        {
+        public void StartGame(Player player) {
             Console.WriteLine(AdventureGameConstants.INTRO);
             InputLoop(player);
         }
 
-        public void InputLoop(Player player)
-        {
+        public void InputLoop(Player player) {
+
             while (true) {
 
                 // display room information
@@ -48,13 +48,14 @@ namespace textAdventureGameV3
                 /* ACTIONS OF THE PLAYER */
                 /* ********************* */
 
-                /* ACTION 1 - DIRECTION: the player want to move to the next room  */
-                
-                if (currentRoom.Transitions.TryGetValue(input, out Room nextRoom)) {
+                /* ACTION 1 - DIRECTION: the player want to move to the next room  */                
+                if (currentRoom.Transitions.TryGetValue(input, out Room nextRoom))
+                {
 
                     /** if the secret door is opened **/
                     bool secretDoorOpened = openSecretDoor(input);
-                    if (secretDoorOpened) {
+                    if (secretDoorOpened)
+                    {
                         Item elvenBook = getItemFromRoom(input);
                         addItemToInventory(player, elvenBook);
                         LinqHelper.RenameKey(currentRoom.Transitions, AdventureGameConstants.ACCESS_SECRET_DOOR, AdventureGameConstants.NORTH);
@@ -65,17 +66,27 @@ namespace textAdventureGameV3
 
                     /** if the number of moves is even, the enemy is moved **/
                     moves++;
-                    if (moves % 2 == 0) {
+                    if (moves % 2 == 0)
+                    {
                         moveEnemy();
+                    }
+
+                    /** if the enemy is exactly in the current room **/
+                    bool isInCurrentRoom = checkEnemyInCurrentRoom();
+                    if (isInCurrentRoom) {
+                        Console.WriteLine(AdventureGameConstants.MESSAGE_ENEMY_SAME_ROOM);
+                    }
+                    else {
+                        Console.WriteLine(AdventureGameConstants.MESSAGE_ENEMY_ROOM + enemyRoom.RoomName);
                     }
                 }
 
                 /* ACTION 2 - PICK UP: add an item to their inventory by typing the command */
                 else if (input.StartsWith(AdventureGameConstants.ACTION_PICK_UP)) {
 
-                    Item itemPicked = getItemFromRoom(input);
-                    if (itemPicked != null){
-                        addItemToInventory(player, itemPicked);
+                    Item itemToPick = getItemFromRoom(input);
+                    if (itemToPick != null) {
+                        addItemToInventory(player, itemToPick);
                     }
                     else {
                         Console.WriteLine(AdventureGameConstants.MESSAGE_ITEM_NOT_IN_ROOM);
@@ -85,9 +96,9 @@ namespace textAdventureGameV3
                 /* ACTION 3 - DROP: remove an item from his inventory and leaves it in the current room */
                 else if (input.StartsWith(AdventureGameConstants.ACTION_DROP)) {
 
-                    Item itemDropped = getItemFromInventory(input, player);
-                    if (itemDropped != null) {
-                        removeItemFromInventory(player, itemDropped);
+                    Item itemToDrop = getItemFromInventory(input, player);
+                    if (itemToDrop != null) {
+                        removeItemFromInventory(player, itemToDrop);
                     }
                     else {
                         Console.WriteLine(AdventureGameConstants.MESSAGE_ITEM_NOT_IN_INVENTORY);
@@ -97,10 +108,10 @@ namespace textAdventureGameV3
                 /* ACTION 4 - DESCRIBE: describe an item in inventory or in the same room */
                 else if (input.StartsWith(AdventureGameConstants.ACTION_DESCRIBE)) {
 
-                    Item itemDescribed = describeItem(input, player);
+                    Item itemToDescribe = describeItem(input, player);
 
-                    if (itemDescribed != null) {
-                        Console.WriteLine(itemDescribed.Description);
+                    if (itemToDescribe != null) {
+                        Console.WriteLine(itemToDescribe.Description);
                     }
                     else {
                         Console.WriteLine(AdventureGameConstants.MESSAGE_ITEM_NOT_INVENT_AND_ROOM);
@@ -114,11 +125,24 @@ namespace textAdventureGameV3
 
                 /* ACTION 6 - ATTACK ENEMY WITH WEAPON: the player can attack the enemy in the room with a weapon */
                 else if (input.StartsWith(AdventureGameConstants.ACTION_ATTACK_ENEMY) && input.Contains("with")) {
-                    
-                    // lui cest tromp
-                    Console.WriteLine("Troll is struck with elven sword!");
-                    // lui cest harpsichord
-                    Console.WriteLine("harpsichord was destroyed by elven sword!");
+
+                    // Check if the enemy is in the current room and if the player has the weapon in his inventory
+                    Weapon weapon = getWeaponFromInventory(input, player);
+                    if (checkEnemyInCurrentRoom() && weapon != null) {
+                         
+
+                        foreach(Enemy enemy in enemyRoom.Items.ToList()) {
+                            if (input.Contains(enemy.Name)) {
+
+                                weapon.printWeapon(enemy);
+
+
+                                enemy.IsDestroyed = true;
+                                enemy.printEnemy();
+                            }
+                        }
+                    }
+                   
                 }
 
                 // If the action entered by the player isn't correct / doesn't exist
@@ -126,7 +150,7 @@ namespace textAdventureGameV3
                     Console.WriteLine(AdventureGameConstants.MESSAGE_INVALID_ACTION);
                 }
 
-                // the room is the final room to the end = finish the game
+                // The room is the final room to the end = finish the game
                 if (currentRoom.FinalRoom) {
 
                     currentRoom.PrintRoom();
@@ -134,6 +158,15 @@ namespace textAdventureGameV3
                     break;
                 }
             }
+        }
+
+
+        /**
+         * bool checkEnemyInCurrentRoom()
+         * Check if the enemy is in the current room where the player is
+         */
+        private bool checkEnemyInCurrentRoom() {
+            return currentRoom == enemyRoom;
         }
 
         /**
@@ -183,18 +216,31 @@ namespace textAdventureGameV3
         private Item getItemFromInventory(string input, Player player) { 
 
             // check if the inventory of the player is not empty
-            if (player.Inventory.Count != 0)
-            {
-                foreach (Item item in player.Inventory.ToList())
-                {
-                    if (input.Contains(item.Name))
-                    {
+            if (player.Inventory.Count != 0) {
+                foreach (Item item in player.Inventory.ToList()) {
+                    if (input.Contains(item.Name)) {
                         return item;
                     } 
                 }
             }
             return null;
+        }
 
+        /*
+         * getWeaponFromInventory(String input, Player player)
+         * Get the weapon from the list of items in the inventory
+         */
+        private Weapon getWeaponFromInventory(string input, Player player) {
+            
+            // check if the inventory of the player is not empty
+            if (player.Inventory.Count != 0) {
+                foreach (Weapon weapon in player.Inventory.ToList()) {
+                    if (input.Contains(weapon.Name)) {
+                        return weapon;
+                    }
+                }
+            }
+            return null;
         }
 
         /*
@@ -274,7 +320,7 @@ namespace textAdventureGameV3
 
             // 2- remove enemy from the room
             Item tromp = new Enemy();
-            foreach (Room enemyRoom in roomslist) {
+            foreach (Room enemyInRoom in roomslist) {
                 foreach(Item enemy in enemyRoom.Items.ToList()) {
                     if(enemy.Name == AdventureGameConstants.ENEMY_TROMP) {
                         tromp = enemy;
@@ -284,11 +330,9 @@ namespace textAdventureGameV3
             }
 
             // 3- move the enemy to another random room
-            Room randomRoom = roomslist[nb];
-            randomRoom.Items.Add(tromp);
-
-            // 4- display message
-            Console.WriteLine(AdventureGameConstants.MESSAGE_ROOM_ENEMY + randomRoom.RoomName);
+            enemyRoom = roomslist[nb];
+            enemyRoom.Items.Add(tromp);
+             
         }
 
     }

@@ -34,9 +34,12 @@ namespace textAdventureGameV3
         public const string MESSAGE_ITEM_NOT_IN_INVENTORY = "Sorry, you don't have that item in your inventory.";
         public const string MESSAGE_ITEM_NOT_IN_ROOM = "Sorry, this room doesn't have that item, or doesn't exist.";
         public const string MESSAGE_ITEM_NOT_INVENT_AND_ROOM = "Sorry, this item isn't in this room, in your inventory neither.";
+        
         public const string MESSAGE_EMPTY_INVENTORY = "Your inventory is empty.";
 
-        public const string MESSAGE_ROOM_ENEMY = ENEMY_TROMP + " is now in ";
+        public const string MESSAGE_ENEMY_ROOM = ENEMY_TROMP + " is now in ";
+        public const string MESSAGE_ENEMY_SAME_ROOM = ENEMY_TROMP + " is in the room.";
+
         public const string MESSAGE_INVALID_ACTION = "Invalid Action.";
         public const string MESSAGE_QUIT_GAME = "Thank you playing with game with us.";
         

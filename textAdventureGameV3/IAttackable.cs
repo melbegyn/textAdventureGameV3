@@ -7,5 +7,7 @@ namespace textAdventureGameV3
     interface IAttackable
     {
          bool IsDestroyed { get; set; }
+
+         void printEnemy();
     }
 }

@@ -54,9 +54,9 @@ namespace textAdventureGameV3
             RoomName = "Living room",
             RoomDescription = "You are in the living room. There are doors to the north, south, east, and west. There is a staircase going down.",
             Items = new List<Item> {
-                new Item { Name = "trophy case", Description = "A trophy case containing a massive golden cup", PointValue = 150 },
-                new Item { Name = "elven sword", Description = "A leaf-bladed longsword, elven crafted.", PointValue = 150 },
-                new Item { Name = "fancy rug", Description = "A large, oriental-style rug with exceptional craftsmanship.", PointValue = 100 }
+                new Item   { Name = "trophy case", Description = "A trophy case containing a massive golden cup", PointValue = 150 },
+                new Weapon { Name = "elven sword", Description = "A leaf-bladed longsword, elven crafted.", PointValue = 150 },
+                new Item   { Name = "fancy rug", Description = "A large, oriental-style rug with exceptional craftsmanship.", PointValue = 100 }
             }
         };
 
