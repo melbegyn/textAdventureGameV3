@@ -7,35 +7,30 @@ namespace textAdventureGameV3
     class Enemy : Item, IAttackable
     {
         // Enemies: Tromp and Hapsichord 
-        public bool _isDestroyed;
 
-        public bool IsDestroyed  // read-write instance property
-        {
-            get => _isDestroyed;
-            set => _isDestroyed = value;
-        }
+        public bool IsDestroyed { get; set; }
+        public string TypeOfAttack { get; set; } 
+        public string LostBattleMessage { get; set; }
 
-        public Enemy()
-        {
+        public Enemy() {
             IsDestroyed = false;
         }
- 
+
+
         public void printEnemy() {
+            // if the player has killed the enemy
             if(IsDestroyed) {
-                // for a Tromp
-                //"Troll is struck with elven sword!"
-                Console.WriteLine("Tromp lies destroyed here.");
-                // for a harpsichord
-                //"harpsichord was destroyed by elven sword!"
-                Console.WriteLine("A destroyed harpsichord, worth 0.");
+                Console.WriteLine(LostBattleMessage);
             }
-            // if finally the player hasn't destroyed the enemy and left 
+            // if finally the player hasn't attacked the enemy and left 
             else {
-                // for a Tromp
-                Console.WriteLine("The Troll attacks and slays you!");
-                // for a harpsichord
-                Console.WriteLine("The Harpsichord attacks and slays you!");
+                Console.WriteLine("The " + Name + " attacks and slays you!");
             }
         }
+
+        public override string ToString() {
+            return $"{Name}: ({PointValue} gold) {Description}";
+        }
+
     }
 }

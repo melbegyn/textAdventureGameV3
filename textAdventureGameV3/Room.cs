@@ -16,14 +16,14 @@ namespace textAdventureGameV3
 
         public void PrintRoom() {
             Console.WriteLine(this.RoomDescription);
-            if (Items.Count > 0)
-            {
-                foreach (Item item in Items)
-                {
+            if (Items.Count > 0) {
+                foreach (Item item in Items) {
                     // invokes Item.ToString()
                     Console.WriteLine(item);
                 }
             }
         }
+
+
     }
 }

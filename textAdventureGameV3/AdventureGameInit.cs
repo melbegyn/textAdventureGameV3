@@ -8,6 +8,8 @@ namespace textAdventureGameV3
          
         public AdventureGameInit() {
             currentRoom = entranceHall;
+            enemyRoom = paintingRoom;
+
             setupRooms();
             initRoomsList();
         }
@@ -66,7 +68,7 @@ namespace textAdventureGameV3
             RoomName = "Painting room",
             RoomDescription = "You are in the painting room. There is a Harpsichord. A painting depicts a skeleton holding open a gateway to an underground passage. A male elf is entering the passage. A female elf is holding a strange orb. A human man stands to the side observing.",
             Items = new List<Item> {
-                new Enemy { Name = AdventureGameConstants.ENEMY_HARPSICHORD, Description = "An incredibly heavy harpsichord.", PointValue = 300 },
+                new Enemy { Name = AdventureGameConstants.ENEMY_HARPSICHORD, Description = "An incredibly heavy harpsichord.", PointValue = 300, TypeOfAttack = "destroy", LostBattleMessage = "A destroyed harpsichord, worth 0" },
                 new Item  { Name = "oil painting", Description = "The painting depicts a skeleton holding open a gateway to an underground passage. A male elf is entering the passage. A female elf is holding a strange orb. A human man stands to the side observing.", PointValue = 150 }
             }
         };
@@ -101,8 +103,8 @@ namespace textAdventureGameV3
             RoomName = "Basement",
             RoomDescription = "You are in a tidy cellar. There are barrels of wine here. A door leads to the north, and a staircase goes up.",
             Items = new List<Item>{
-            new Item { Name = "wine", Description = "A bottle of fine wine.", PointValue = 50 }
-        }
+                new Item { Name = "wine", Description = "A bottle of fine wine.", PointValue = 50 }
+            }
         };
 
         // library
@@ -125,7 +127,7 @@ namespace textAdventureGameV3
                 new Item  { Name = "orb", Description = "The Orb of Yendor, an ancient artifact that has been missing for many years.", PointValue = 500 },
                 new Item  { Name = "flask", Description = "A flask encrusted with gems.", PointValue = 200 },
                 new Item  { Name = "lamp", Description = "A lamp with a ruby-tinted filter.", PointValue = 30 },
-                new Enemy { Name = AdventureGameConstants.ENEMY_TROMP, Description = "Un coup de gel hydroloc et tu es desingé", PointValue = 540 }
+                new Enemy { Name = AdventureGameConstants.ENEMY_TROMP, Description = "It can disinfect you in one minute.", PointValue = 540, TypeOfAttack = "strike", LostBattleMessage = "Tromp lies destroyed here." }
             }
         };
 
@@ -148,17 +150,17 @@ namespace textAdventureGameV3
 
             // entrance hall
             entranceHall.Transitions = new Dictionary<string, Room> {
-                {AdventureGameConstants.SOUTH, outside},
-                {AdventureGameConstants.NORTH, livingRoom}
+                { AdventureGameConstants.SOUTH, outside},
+                { AdventureGameConstants.NORTH, livingRoom}
             };
 
             // living room
             livingRoom.Transitions = new Dictionary<string, Room> {
-                {AdventureGameConstants.SOUTH, entranceHall},
-                {AdventureGameConstants.NORTH, fancyBedroom},
-                {AdventureGameConstants.EAST, kitchen},
-                {AdventureGameConstants.WEST, paintingRoom},
-                {AdventureGameConstants.DOWN, basement}
+                { AdventureGameConstants.SOUTH, entranceHall},
+                { AdventureGameConstants.NORTH, fancyBedroom},
+                { AdventureGameConstants.EAST, kitchen},
+                { AdventureGameConstants.WEST, paintingRoom},
+                { AdventureGameConstants.DOWN, basement}
             };
 
             // fancy bedroom
@@ -194,7 +196,5 @@ namespace textAdventureGameV3
                 { AdventureGameConstants.SOUTH, library}
             };
         }   
-
-    }
-
+    } 
 }

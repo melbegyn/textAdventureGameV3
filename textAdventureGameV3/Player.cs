@@ -16,5 +16,5 @@ namespace textAdventureGameV3
             /* init the list of items */
             inventory = new List<Item>();
         }
-}
+    }
 }

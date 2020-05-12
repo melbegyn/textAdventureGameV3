@@ -30,6 +30,12 @@ namespace textAdventureGameV3
         public const string ENEMY_HARPSICHORD = "harpsichord";
         public const string ENEMY_TROMP = "Tromp";
 
+        /** attacks **/
+        public static readonly Dictionary<string, string> ATTACK_MESSAGES = new Dictionary<string, string> {
+            {"strike", "is struck with"}, 
+            {"destroy", "was destroyed by"}
+        }; 
+
         /** messages **/
         public const string MESSAGE_ITEM_NOT_IN_INVENTORY = "Sorry, you don't have that item in your inventory.";
         public const string MESSAGE_ITEM_NOT_IN_ROOM = "Sorry, this room doesn't have that item, or doesn't exist.";
@@ -40,9 +46,10 @@ namespace textAdventureGameV3
         public const string MESSAGE_ENEMY_ROOM = ENEMY_TROMP + " is now in ";
         public const string MESSAGE_ENEMY_SAME_ROOM = ENEMY_TROMP + " is in the room.";
 
+        public const string MESSAGE_INVALID_ATTACK = "Sorry, you cannot attack this enemy or use this weapon.";
         public const string MESSAGE_INVALID_ACTION = "Invalid Action.";
         public const string MESSAGE_QUIT_GAME = "Thank you playing with game with us.";
-        
+         
 
     }
 }

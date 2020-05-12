@@ -6,7 +6,8 @@ namespace textAdventureGameV3
 {
     interface IWeapon
     {
-        void printWeapon(Enemy enemy);
+
+        void attackEnemy(Enemy enemy);
 
     }
 }
