@@ -366,6 +366,7 @@ namespace textAdventureGameV3
          */
         private void moveEnemy() {
 
+
             // the enemy is moved every two moves of the player
             if (moves % 2 == 0 && trompRoom != null) {
 
@@ -374,7 +375,19 @@ namespace textAdventureGameV3
                 int nb = random.Next(roomslist.Count);
 
                 // 2- remove enemy from the room
-                Item tromp = getTrompFromRoom();
+                Item tromp;
+                if (moves == 0) {
+                    tromp = new Enemy {
+                            Name = AdventureGameConstants.ENEMY_TROMP,
+                            Description = "It can disinfect you in one minute.",
+                            PointValue = 540,
+                            TypeOfAttack = "strike",
+                            LostBattleMessage = "Tromp lies destroyed here."
+                    };
+                }
+                else {
+                    tromp = getTrompFromRoom();
+                }
 
                 // 3- move the enemy to another random room
                 trompRoom = updateTrompRoom(tromp, nb);

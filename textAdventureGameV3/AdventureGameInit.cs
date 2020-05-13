@@ -126,8 +126,7 @@ namespace textAdventureGameV3
             Items = new List<Item> {
                 new Item  { Name = "orb", Description = "The Orb of Yendor, an ancient artifact that has been missing for many years.", PointValue = 500 },
                 new Item  { Name = "flask", Description = "A flask encrusted with gems.", PointValue = 200 },
-                new Item  { Name = "lamp", Description = "A lamp with a ruby-tinted filter.", PointValue = 30 },
-                new Enemy { Name = AdventureGameConstants.ENEMY_TROMP, Description = "It can disinfect you in one minute.", PointValue = 540, TypeOfAttack = "strike", LostBattleMessage = "Tromp lies destroyed here." }
+                new Item  { Name = "lamp", Description = "A lamp with a ruby-tinted filter.", PointValue = 30 }
             }
         };
 
