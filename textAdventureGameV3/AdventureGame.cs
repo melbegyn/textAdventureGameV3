@@ -17,8 +17,7 @@ namespace textAdventureGameV3
     public class AdventureGame {
 
         public Room currentRoom;
-        public Room trompRoom;
-        public bool isTrompDestroyed = false;
+        public Room trompRoom; 
 
         public List<Room> roomslist = new List<Room>();
         public int moves = 0; 
@@ -36,7 +35,7 @@ namespace textAdventureGameV3
                 currentRoom.PrintRoom();
 
                 // Print if the enemy is in the current room 
-                printIfEnemyInRoom();
+                printEnemy();
 
                 string input = Console.ReadLine();
 
@@ -65,10 +64,10 @@ namespace textAdventureGameV3
                     bool isEndGame = false;
                     if (checkEnemyInCurrentRoom())  {
                         foreach (Enemy enemy in currentRoom.Items.OfType<Enemy>()) {
-
-                            enemy.printEnemy();
-
+                             
                             if (!enemy.IsDestroyed) {
+
+                                Console.WriteLine("The " + enemy.Name + " attacks and slays you!");
 
                                 /***************/
                                 /** GAME OVER **/
@@ -86,8 +85,8 @@ namespace textAdventureGameV3
                     // update the current room  
                     currentRoom = nextRoom;
 
-                    // if the number of moves is even, the enemy is moved  
-                    if (!isTrompDestroyed && moves % 2 == 0) {
+                    // if the enemy is still alive and the number of moves is even, the enemy is moved  
+                    if (moves % 2 == 0 && trompRoom != null) {
                         moveEnemy();
                         Console.WriteLine(AdventureGameConstants.MESSAGE_ENEMY_ROOM + trompRoom.RoomName);
                     }
@@ -137,10 +136,6 @@ namespace textAdventureGameV3
                 else if (input.StartsWith(AdventureGameConstants.ACTION_SHOW_INVENTORY))  {
                     showInventory(player);
                 }
-    
-                else if (input.StartsWith("show points")) {
-                    Console.WriteLine(player.score);
-                }
 
                 /* ACTION 6 - ATTACK ENEMY WITH WEAPON: the player can attack the enemy in the room with a weapon */
                 else if (input.StartsWith(AdventureGameConstants.ACTION_ATTACK_ENEMY) && input.Contains("with")) {
@@ -150,14 +145,19 @@ namespace textAdventureGameV3
                     if (weapon != null) {
                         foreach (Enemy enemy in currentRoom.Items.ToList().OfType<Enemy>()) {
                             if (input.Contains(enemy.Name)) {
+
                                 weapon.attackEnemy(enemy);
                                 currentRoom.Items.Remove(enemy);
+                                
                                 if(enemy.Name == "Tromp") {
                                     player.score += enemy.PointValue;
-                                    isTrompDestroyed = true;
+                                    trompRoom = null;
                                 }
-                                enemy.printEnemy();
-                                
+                                else {
+                                    createNewItem(currentRoom);
+                                }
+                                 
+                                Console.WriteLine(enemy.LostBattleMessage);
                             }
                         }
                     }
@@ -172,7 +172,6 @@ namespace textAdventureGameV3
                     Console.WriteLine(AdventureGameConstants.MESSAGE_INVALID_ACTION);
                 }
 
-
                 // The room is the final room to the end = finish the game
                 if (currentRoom.FinalRoom) {
 
@@ -186,9 +185,18 @@ namespace textAdventureGameV3
             }
         }
 
-        private void printIfEnemyInRoom() {
+        private void createNewItem(Room currentRoom) {
+            Item gold = new Item();
+            gold.Name = "gold";
+            gold.Description = "Shiny gold coins.";
+            gold.PointValue = 100;
+
+            currentRoom.Items.Add(gold);
+        }
+
+        private void printEnemy() {
             bool isInNewRoom = checkEnemyInCurrentRoom();
-            if (!isTrompDestroyed && isInNewRoom)  {
+            if (isInNewRoom) {
                 Console.WriteLine(AdventureGameConstants.MESSAGE_ENEMY_SAME_ROOM);
             }
         }
@@ -347,25 +355,43 @@ namespace textAdventureGameV3
         private void moveEnemy() {
 
             // 1- init random
-            Random random = new Random(); 
+            Random random = new Random();
             int nb = random.Next(roomslist.Count);
 
             // 2- remove enemy from the room
+            Item tromp = getTrompFromRoom();
+
+            // 3- move the enemy to another random room
+            trompRoom = updateTrompRoom(tromp, nb); 
+        }
+
+        private Room updateTrompRoom(Item tromp, int nb) {
+
+            Room enemyRoom = new Room();
+
+            if (tromp != null) { 
+                trompRoom = roomslist[nb];
+                trompRoom.Items.Add(tromp);
+                enemyRoom = trompRoom;
+            }
+            return enemyRoom;
+        }
+
+        private Item getTrompFromRoom() {
             Item tromp = new Enemy();
-            foreach (Room enemyInRoom in roomslist) {
-                foreach(Item enemy in enemyInRoom.Items.ToList()) {
-                    if(enemy.Name == AdventureGameConstants.ENEMY_TROMP) {
+            foreach (Room enemyInRoom in roomslist)
+            {
+                foreach (Item enemy in enemyInRoom.Items.ToList())
+                {
+                    if (enemy.Name == AdventureGameConstants.ENEMY_TROMP)
+                    {
                         tromp = enemy;
                         trompRoom.Items.Remove(enemy);
                     }
                 }
             }
 
-            // 3- move the enemy to another random room
-            trompRoom = roomslist[nb];
-            trompRoom.Items.Add(tromp);
-             
+            return tromp;
         }
-
     }
 }
