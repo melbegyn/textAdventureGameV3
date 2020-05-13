@@ -18,12 +18,9 @@ namespace textAdventureGameV3
             Console.WriteLine(this.RoomDescription);
             if (Items.Count > 0) {
                 foreach (Item item in Items) {
-                    // invokes Item.ToString()
                     Console.WriteLine(item);
                 }
             }
         }
-
-
     }
 }

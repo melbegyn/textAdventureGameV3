@@ -4,8 +4,7 @@ using System.Text;
 
 namespace textAdventureGameV3
 {
-    interface IWeapon
-    {
+    interface IWeapon {
 
         void attackEnemy(Enemy enemy);
 
