@@ -68,8 +68,8 @@ namespace textAdventureGameV3
             RoomName = "Painting room",
             RoomDescription = "You are in the painting room. There is a Harpsichord. A painting depicts a skeleton holding open a gateway to an underground passage. A male elf is entering the passage. A female elf is holding a strange orb. A human man stands to the side observing.",
             Items = new List<Item> {
-                new Enemy { Name = AdventureGameConstants.ENEMY_HARPSICHORD, Description = "An incredibly heavy harpsichord.", PointValue = 300, TypeOfAttack = "destroy", LostBattleMessage = "A destroyed harpsichord, worth 0" },
-                new Item  { Name = "oil painting", Description = "The painting depicts a skeleton holding open a gateway to an underground passage. A male elf is entering the passage. A female elf is holding a strange orb. A human man stands to the side observing.", PointValue = 150 }
+                new Item  { Name = "oil painting", Description = "The painting depicts a skeleton holding open a gateway to an underground passage. A male elf is entering the passage. A female elf is holding a strange orb. A human man stands to the side observing.", PointValue = 150 },
+                new Enemy { Name = AdventureGameConstants.ENEMY_HARPSICHORD, Description = "An incredibly heavy harpsichord.", PointValue = 300, TypeOfAttack = "destroy", LostBattleMessage = "A destroyed harpsichord, worth 0" }
             }
         };
 

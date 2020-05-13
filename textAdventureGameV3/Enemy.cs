@@ -4,7 +4,7 @@ using System.Text;
 
 namespace textAdventureGameV3
 {
-    class Enemy : Item, IAttackable
+    public class Enemy : Item, IAttackable
     {
         // Enemies: Tromp and Hapsichord 
 
@@ -17,8 +17,12 @@ namespace textAdventureGameV3
         }
 
         public override string ToString() {
-            return $"{Name}: ({PointValue} gold) {Description}";
+            if(IsDestroyed) {
+                return LostBattleMessage;
+            }
+            else {
+                return $"{Name}: ({PointValue} gold) {Description}";
+            }
         }
-
     }
 }
