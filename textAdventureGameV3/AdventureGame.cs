@@ -143,23 +143,7 @@ namespace textAdventureGameV3
                     // Check if the enemy is in the current room and if the player has the weapon in his inventory
                     Weapon weapon = getWeaponFromInventory(input, player);
                     if (weapon != null) {
-                        foreach (Enemy enemy in currentRoom.Items.ToList().OfType<Enemy>()) {
-                            if (input.Contains(enemy.Name)) {
-
-                                weapon.attackEnemy(enemy);
-                                currentRoom.Items.Remove(enemy);
-                                
-                                if(enemy.Name == "Tromp") {
-                                    player.score += enemy.PointValue;
-                                    trompRoom = null;
-                                }
-                                else {
-                                    createNewItem(currentRoom);
-                                }
-                                 
-                                Console.WriteLine(enemy.LostBattleMessage);
-                            }
-                        }
+                        attackEnemy(player, input, weapon);
                     }
                     else {
                         Console.WriteLine(AdventureGameConstants.MESSAGE_INVALID_ATTACK);
@@ -167,7 +151,7 @@ namespace textAdventureGameV3
 
                 }
 
-                // If the action entered by the player isn't correct / doesn't exist
+                // ELSE : If the action entered by the player isn't correct / doesn't exist
                 else {
                     Console.WriteLine(AdventureGameConstants.MESSAGE_INVALID_ACTION);
                 }
@@ -185,6 +169,33 @@ namespace textAdventureGameV3
             }
         }
 
+        private void attackEnemy(Player player, string input, Weapon weapon)
+        {
+            foreach (Enemy enemy in currentRoom.Items.ToList().OfType<Enemy>())
+            {
+                if (input.Contains(enemy.Name))
+                {
+
+                    weapon.attackEnemy(enemy);
+                    currentRoom.Items.Remove(enemy);
+
+                    if (enemy.Name == "Tromp") {
+                        player.score += enemy.PointValue;
+                        trompRoom = null;
+                    }
+                    else {
+                        createNewItem(currentRoom);
+                    }
+
+                    Console.WriteLine(enemy.LostBattleMessage);
+                }
+            }
+        }
+
+        /** 
+         * createNewItem(Room currentRoom)
+         * Create a new item and add it to the room where the Enemy is killed
+         */
         private void createNewItem(Room currentRoom) {
             Item gold = new Item();
             gold.Name = "gold";
@@ -194,6 +205,10 @@ namespace textAdventureGameV3
             currentRoom.Items.Add(gold);
         }
 
+        /*
+         * printEnemy()
+         * Check if enemy is in room
+         */
         private void printEnemy() {
             bool isInNewRoom = checkEnemyInCurrentRoom();
             if (isInNewRoom) {
@@ -244,8 +259,7 @@ namespace textAdventureGameV3
                         return item;
                     }
                 }
-            }
-             
+            } 
             return null;
         }
 
@@ -352,6 +366,9 @@ namespace textAdventureGameV3
             }
         }
 
+        /*
+         * Choose a random room to move the Tromp enemy 
+         */
         private void moveEnemy() {
 
             // 1- init random
@@ -389,8 +406,7 @@ namespace textAdventureGameV3
                         trompRoom.Items.Remove(enemy);
                     }
                 }
-            }
-
+            } 
             return tromp;
         }
     }
