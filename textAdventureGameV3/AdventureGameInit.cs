@@ -8,7 +8,7 @@ namespace textAdventureGameV3
          
         public AdventureGameInit() {
             currentRoom = entranceHall;
-            enemyRoom = paintingRoom;
+            trompRoom = paintingRoom;
 
             setupRooms();
             initRoomsList();
