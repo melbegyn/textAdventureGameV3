@@ -61,23 +61,7 @@ namespace textAdventureGameV3
                     }
 
                     // check if the player change the room without attacking the enemy
-                    bool isEndGame = false;
-                    if (checkEnemyInCurrentRoom())  {
-                        foreach (Enemy enemy in currentRoom.Items.OfType<Enemy>()) {
-                             
-                            if (!enemy.IsDestroyed) {
-
-                                Console.WriteLine("The " + enemy.Name + " attacks and slays you!");
-
-                                /***************/
-                                /** GAME OVER **/
-                                /***************/
-                                player.score = 0;
-                                PrintScore(player);
-                                isEndGame = true;
-                            }
-                        }
-                    }
+                    bool isEndGame = isPlayerFledEnemy(player);
                     if (isEndGame) {
                         break;
                     }
@@ -169,6 +153,27 @@ namespace textAdventureGameV3
             }
         }
 
+        private bool isPlayerFledEnemy(Player player) {
+             
+            if (checkEnemyInCurrentRoom()) {
+                foreach (Enemy enemy in currentRoom.Items.OfType<Enemy>()) {
+
+                    if (!enemy.IsDestroyed) {
+
+                        Console.WriteLine("The " + enemy.Name + " attacks and slays you!");
+
+                        /***************/
+                        /** GAME OVER **/
+                        /***************/
+                        player.score = 0;
+                        PrintScore(player);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         private void attackEnemy(Player player, string input, Weapon weapon)
         {
             foreach (Enemy enemy in currentRoom.Items.ToList().OfType<Enemy>())
@@ -213,6 +218,13 @@ namespace textAdventureGameV3
             bool isInNewRoom = checkEnemyInCurrentRoom();
             if (isInNewRoom) {
                 Console.WriteLine(AdventureGameConstants.MESSAGE_ENEMY_SAME_ROOM);
+            }
+            else {
+                foreach (Enemy enemy in currentRoom.Items.ToList().OfType<Enemy>()) {
+                    if (enemy.IsDestroyed) {
+                        Console.WriteLine(enemy.LostBattleMessage);
+                    }
+                }
             }
         }
 
