@@ -10,6 +10,7 @@ namespace textAdventureGameV3
         public string RoomName { get; set; }
         public string RoomDescription { get; set; }
         public List<Item> Items { get; set; }
+        public List<Enemy> Enemies { get; set; }
         public Dictionary<string, Room> Transitions { get; set; }
 
         public bool FinalRoom { get; set; }
@@ -19,6 +20,9 @@ namespace textAdventureGameV3
             if (Items.Count > 0) {
                 foreach (Item item in Items) {
                     Console.WriteLine(item);
+                }
+                foreach(Enemy enemy in Enemies) {
+                    Console.WriteLine(enemy);
                 }
             }
         }

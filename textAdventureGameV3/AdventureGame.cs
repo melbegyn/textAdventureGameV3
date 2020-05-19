@@ -72,11 +72,17 @@ namespace textAdventureGameV3
                     }
 
                     // Remove the destroyed enemy from items list of the current room
-                    foreach (Enemy enemy in currentRoom.Items.ToList().OfType<Enemy>()) {
-                        if (enemy.IsDestroyed) {
-                            currentRoom.Items.Remove(enemy);
-                        } 
+                    if(currentRoom.Enemies != null)
+                    {
+                        foreach (Enemy enemy in currentRoom.Enemies.ToList().OfType<Enemy>())
+                        {
+                            if (enemy.IsDestroyed)
+                            {
+                                currentRoom.Enemies.Remove(enemy);
+                            }
+                        }
                     }
+
 
                     // ********************* UPDATE THE ROOM *********************
                     currentRoom = nextRoom;
@@ -168,8 +174,8 @@ namespace textAdventureGameV3
          * if TRUE = end of the game.
          */
         private bool isPlayerFledEnemy(Player player) {
-            if (currentRoom.Items.ToList().OfType<Enemy>().Any()) {
-                foreach (Enemy enemy in currentRoom.Items.ToList().OfType<Enemy>()) { 
+            if (currentRoom.Enemies.ToList().Any()) {
+                foreach (Enemy enemy in currentRoom.Enemies.ToList()) { 
                     if (!enemy.IsDestroyed) {
 
                         Console.WriteLine("The " + enemy.Name + " attacks and slays you!");
@@ -191,7 +197,7 @@ namespace textAdventureGameV3
          * attack the enemy with the weapon, 
          */
         private void attackEnemy(Player player, string input, Weapon weapon)  {
-            foreach (Enemy enemy in currentRoom.Items.ToList().OfType<Enemy>()) {
+            foreach (Enemy enemy in currentRoom.Enemies.ToList().OfType<Enemy>()) {
                 if (input.Contains(enemy.Name)) {
 
                     weapon.attackEnemy(enemy);
@@ -375,7 +381,7 @@ namespace textAdventureGameV3
                 int nb = random.Next(roomslist.Count);
 
                 // 2- remove enemy from the room
-                Item tromp;
+                Enemy tromp;
                 if (moves == 0) {
                     tromp = new Enemy {
                             Name = AdventureGameConstants.ENEMY_TROMP,
@@ -397,27 +403,33 @@ namespace textAdventureGameV3
             }
         }
 
-        private Room updateTrompRoom(Item tromp, int nb) {
+        private Room updateTrompRoom(Enemy tromp, int nb) {
 
             Room enemyRoom = new Room();
 
             if (tromp != null) { 
                 trompRoom = roomslist[nb];
-                trompRoom.Items.Add(tromp);
+                trompRoom.Enemies.Add(tromp);
                 enemyRoom = trompRoom;
             }
             return enemyRoom;
         }
 
-        private Item getTrompFromRoom() {
-            Item tromp = new Enemy();
+        private Enemy getTrompFromRoom() {
+            Enemy tromp = new Enemy();
             foreach (Room enemyInRoom in roomslist) {
-                foreach (Item enemy in enemyInRoom.Items.ToList()) {
-                    if (enemy.Name == AdventureGameConstants.ENEMY_TROMP) {
-                        tromp = enemy;
-                        trompRoom.Items.Remove(enemy);
+                if(enemyInRoom.Enemies != null || enemyInRoom.Enemies.Any())
+                {
+                    foreach (Enemy enemy in enemyInRoom.Enemies.ToList())
+                    {
+                        if (enemy.Name == AdventureGameConstants.ENEMY_TROMP)
+                        {
+                            tromp = enemy;
+                            trompRoom.Enemies.Remove(enemy);
+                        }
                     }
                 }
+               
             } 
             return tromp;
         }

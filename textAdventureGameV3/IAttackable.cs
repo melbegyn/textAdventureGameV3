@@ -8,6 +8,8 @@ namespace textAdventureGameV3
          bool IsDestroyed { get; set; }
          string TypeOfAttack { get; set; } 
          string LostBattleMessage { get; set; }
+
+
           
     }
 }
